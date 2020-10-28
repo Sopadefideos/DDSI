@@ -55,7 +55,7 @@ ROOT_URLCONF = 'DDSI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/Users/antoniomarfil/Documents/GitHub/DDSI/MusicApp/templates'],
+        'DIRS': [''],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
