@@ -2,7 +2,7 @@
 
 _Sistema de información basado en la música_
 
-## Desarroladores 🚀
+## Desarrolladores 🚀
 
 * [Sopadefideos](https://github.com/Sopadefideos/) - Antonio Marfil Sanchez.
 * [Alvarez18](https://github.com/Alvarez18) - Rafael Álvarez Cabrera.
