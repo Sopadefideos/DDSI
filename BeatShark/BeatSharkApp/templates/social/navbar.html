@@ -33,7 +33,7 @@
         </form>
         <form class="d-flex me-2" method="get">
           {% csrf_token %}
-          <input class="form-control me-2" type="hidden" placeholder="Contraseña" aria-label="Contraseña" name="logout" value="yes">
+          <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout" name="logout" value="yes">
           <button class="btn btn-outline-light me-2" type="submit">Logout</button>
           <div class="dropdown d-flex justify-content-end">
             <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,8 +51,8 @@
         {% else %}
         <form class="d-flex" method="post">
           {% csrf_token %}
-          <input class="form-control me-2" type="text" placeholder="Usuario" aria-label="Usuario" name="user">
-          <input class="form-control me-2" type="password" placeholder="Contraseña" aria-label="Contraseña" name="password">
+          <input class="form-control me-2" type="text" placeholder="Usuario" aria-label="Usuario" name="user" required>
+          <input class="form-control me-2" type="password" placeholder="Contraseña" aria-label="Contraseña" name="password" required>
           <button class="btn btn-outline-light me-2" type="submit">Login</button>
           <button class="btn btn-link me-2">
             <a href="{% url 'register' %}" style="color: white;">Registrate</a>
