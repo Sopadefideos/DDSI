@@ -1,12 +1,16 @@
 from django.db import models
+from passlib.hash import pbkdf2_sha256
 
 # Create your models here.
 
 class Usuario(models.Model):
-    nombre = models.CharField(max_length=50)
-    contraseña = models.CharField(max_length=20)
-    email = models.EmailField()
+    nombre = models.CharField(max_length=50, unique=True)
+    contraseña = models.CharField(max_length=256)
+    email = models.EmailField(unique=True)
     rol = models.SmallIntegerField(default=1)
+
+    def verify_password(self, raw_password):
+        return pbkdf2_sha256.verify(raw_password, self.contraseña)
 
 class Genero(models.Model):
     nombre_genero = models.CharField(max_length=50)
