@@ -18,31 +18,97 @@
 </head>
 
 <body style="background-color: #9e0059;">
-
-  <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
-    <div class="abs-center">
-      <form method="post" class="p-3 form">
-        {% csrf_token %}
-        <div class="form-group m-2">
-          <label for="email">Usuario</label>
-          <input type="text" name="user" id="user" class="form-control" required>
+{% if request.session.rol == 2 %}
+    {% if request.GET.idArtista %}
+    {% for artista in artistas %}
+      {% ifequal artista.id|stringformat:"s" request.GET.idArtista %}
+            <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
+          <div class="abs-center">
+            <form method="post" class="p-3 form">
+              {% csrf_token %}
+              <div class="form-group m-2">
+                <label for="email">Nombre:</label>
+                <input type="text" name="nombre" id="user" class="form-control" placeholder="{{artista.nombre}}">
+              </div>
+              <div class="form-group m-2">
+                <label for="contraseña">Nacionalidad:</label>
+                  <input type="text" name="nacionalidad" id="user" class="form-control" placeholder="{{artista.nacionalidad}}">
+              </div>
+              <div class="form-group m-2">
+                <label for="contraseña">Fecha de nacimiento:</label>
+                <input type="text" name="fechaNacimiento" id="user" class="form-control" placeholder="{{artista.fechaNacimiento}}">
+              </div>
+              <button type="submit" class="btn btn-primary m-2" style="border-color: black; background-color: #9e0059; color: white;">Modificar</button>
+            </form>
+          </div>
         </div>
-        <div class="form-group m-2">
-          <label for="contraseña">Contraseña</label>
-          <input type="password" name="password" id="password" class="form-control" required>
+      {% endifequal %}
+    {% endfor %}
+    {% elif request.GET.idGenero%}
+    {% for genero in generos %}
+      {% ifequal genero.id|stringformat:"s" request.GET.idGenero %}
+            <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
+          <div class="abs-center">
+            <form method="post" class="p-3 form">
+              {% csrf_token %}
+              <div class="form-group m-2">
+                <label for="email">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="{{genero.nombre_genero}}">
+              </div>
+              <button type="submit" class="btn btn-primary m-2" style="border-color: black; background-color: #9e0059; color: white;">Modificar</button>
+            </form>
+          </div>
         </div>
-        <div class="form-group m-2">
-          <label for="contraseña">Repetir Contraseña</label>
-          <input type="password" name="passwordRepeat" id="passwordRepeat" class="form-control" required>
+      {% endifequal %}
+    {% endfor %}
+    {% elif request.GET.idCancion%}
+    {% for cancion in canciones %}
+      {% ifequal cancion.id|stringformat:"s" request.GET.idCancion %}
+            <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
+          <div class="abs-center">
+            <form method="post" class="p-3 form">
+              {% csrf_token %}
+              <div class="form-group m-2">
+                <label for="email">Titulo:</label>
+                <input type="text" name="nombre" id="titulo" class="form-control" placeholder="{{cancion.titulo}}">
+              </div>
+              <button type="submit" class="btn btn-primary m-2" style="border-color: black; background-color: #9e0059; color: white;">Modificar</button>
+            </form>
+          </div>
         </div>
-        <div class="form-group m-2">
-          <label for="contraseña">Email</label>
-          <input type="email" name="email" id="email" class="form-control" required>
+      {% endifequal %}
+    {% endfor %}
+    {% elif request.GET.idAlbum%}
+      {% for album in albumes %}
+      {% ifequal album.id|stringformat:"s" request.GET.idAlbum %}
+            <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
+          <div class="abs-center">
+            <form method="post" class="p-3 form">
+              {% csrf_token %}
+              <div class="form-group m-2">
+                <label for="email">Titulo:</label>
+                <input type="text" name="nombre" id="titulo" class="form-control" placeholder="{{album.nombre}}">
+              </div>
+              <div class="form-group m-2">
+                <label for="email">Numero de canciones:</label>
+                <input type="text" name="nombre" id="titulo" class="form-control" placeholder="{{album.num_canciones}}">
+              </div>
+              <div class="form-group m-2">
+                <label for="email">Fecha de Estreno:</label>
+                <input type="text" name="nombre" id="titulo" class="form-control" placeholder="{{album.fechaEstreno}}">
+              </div>
+              <button type="submit" class="btn btn-primary m-2" style="border-color: black; background-color: #9e0059; color: white;">Modificar</button>
+            </form>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary m-2">Registrate</button>
-      </form>
+      {% endifequal %}
+    {% endfor %}
+    {% endif %}
+  {% else %}
+    <div class="card-body">
+      Donde vas listill@? no estas autorizado.
     </div>
-  </div>
+  {% endif %}
 
   {% if messages %}
   {% for message in messages %}

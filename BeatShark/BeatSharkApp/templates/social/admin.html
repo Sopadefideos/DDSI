@@ -262,7 +262,9 @@
           <tr>
             <td style="padding-left: 2%;">{{cancion.titulo}}</td>
             <td style="">
-            
+              {% for artista in cancion.artista.all %}
+                {{ artista.nombre }}
+              {% endfor %}
             </td>
             <td>
 
@@ -282,7 +284,56 @@
                   <form method="post">
                     {% csrf_token %}
                     <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout"
-                      name="deleteGenero" value="{{ genero.id }}">
+                      name="deleteCancion" value="{{ cancion.id }}">
+                    <button class="btn btn-light m-2 border border-dark" style="color: #9e0059;" type="submit">
+                      <img src="../../static/61848.png" alt="" width="20" height="20" class="d-inline-block align-top">
+                      Eliminar
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          </table>
+    </div>
+  </div>
+<!--ALBUMES-->
+  <div class="card" style="margin: 5%; color: white; background-color: #9e0059; font-weight: bold;">
+    <div class="card-body">
+      Panel de Albumes
+    </div>
+    <div class="card-body" style="background-color: white; color: black; font-weight: lighter;">
+      <table class="table col border border-dark" style="margin-top: 1%; margin-bottom: 1%;">
+        <thead class="thead-dark">
+          <tr style="color: white; background-color:  #9e0059;">
+            <th scope="col" style="padding-left: 2%;">Titulo</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for album in albumes %}
+          <tr>
+            <td style="padding-left: 2%;">{{album.nombre}}</td>
+            <td>
+
+              <div class="btn-group me-2" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="border-color: black; background-color: #9e0059; color: white;">
+                  Opciones
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                  <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;"
+                    href="mod/?idAlbum={{album.id}}">
+                    <img src="../../static/permission-icon-3.jpg" alt="" width="20" height="20"
+                      class="d-inline-block align-top">
+                    Modificar Datos
+                  </a>
+                  <form method="post">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout"
+                      name="deleteAlbum" value="{{ album.id }}">
                     <button class="btn btn-light m-2 border border-dark" style="color: #9e0059;" type="submit">
                       <img src="../../static/61848.png" alt="" width="20" height="20" class="d-inline-block align-top">
                       Eliminar
@@ -326,5 +377,7 @@
     crossorigin="anonymous"></script>
 
 </body>
+
+
 
 </html>

@@ -173,6 +173,12 @@ def admin(request):
         Artista.objects.filter(id=artistId).delete()
         return HttpResponseRedirect("/edit")
 
+     ########## DELETE CANCION ########
+    if (request.POST.get('deleteCancion')):
+        canciontId = request.POST.get('deleteCancion')
+        Cancion.objects.filter(id=canciontId).delete()
+        return HttpResponseRedirect("/edit")
+
     ########## CHANGE ROL ########
     if (request.POST.get('rol')):
         newRol = request.POST.get('rol')
@@ -252,4 +258,16 @@ def fav(request):
 
 def mod(request):
 
-    return render(request, 'social/mod.html')
+
+
+
+
+
+
+    canciones = Cancion.objects.all()
+    usuarios = Usuario.objects.all()
+    artistas = Artista.objects.all()
+    albumes = Album.objects.all()
+    generos = Genero.objects.all()
+    return render(request, 'social/mod.html', {'canciones': canciones, 'artistas': artistas,
+     'albumes': albumes, 'usuarios': usuarios, 'generos': generos})
