@@ -27,25 +27,25 @@ class Album(models.Model):
 
 class Cancion(models.Model):
     titulo = models.CharField(max_length=50)
-    artista = models.CharField(max_length=50)
-    genero = models.OneToOneField(Genero, on_delete=models.CASCADE)
+    artista = models.ManyToManyField(Artista)
+    genero = models.ManyToManyField(Genero)
 
 class FavAlbum(models.Model):
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
-    album = models.OneToOneField(Album, on_delete=models.CASCADE)
+    usuario = models.ManyToManyField(Usuario)
+    album = models.ManyToManyField(Album)
 
 class FavCancion(models.Model):
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
-    cancion = models.OneToOneField(Cancion, on_delete=models.CASCADE)
+    usuario = models.ManyToManyField(Usuario)
+    cancion = models.ManyToManyField(Cancion)
 
 class FavArtista(models.Model):
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
-    artista = models.OneToOneField(Artista, on_delete=models.CASCADE)
+    usuario = models.ManyToManyField(Usuario)
+    artista = models.ManyToManyField(Artista)
 
 class AlbumCancion(models.Model):
-    album = models.OneToOneField(Album, on_delete=models.CASCADE)
-    cancion = models.OneToOneField(Cancion, on_delete=models.CASCADE)
+    album = models.ManyToManyField(Album)
+    cancion = models.ManyToManyField(Cancion)
 
 class CancionArtista(models.Model):
-    cancion = models.OneToOneField(Cancion, on_delete=models.CASCADE)
-    artista = models.OneToOneField(Artista, on_delete=models.CASCADE)
+    cancion = models.ManyToManyField(Cancion)
+    artista = models.ManyToManyField(Artista)

@@ -1,0 +1,178 @@
+<!-- 
+    Como poner img
+    <img src="../../static/batman.png">
+-->
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+  <title>BeatShark</title>
+</head>
+
+<body>
+  {% include "social/navbar.html" %}
+
+  {% if request.session.rol == 2%}
+
+  <div class="card" style="margin: 5%; color: white; background-color: #9e0059; font-weight: bold;">
+    <div class="card-body">
+      Bienvenido {{ request.session.user }}
+    </div>
+    <div class="card-body" style="background-color: white; color: black; font-weight: lighter;">
+      Lista de usuarios
+
+      <table class="table col border border-dark" style="margin-top: 1%; margin-bottom: 1%;">
+        <thead class="thead-dark">
+          <tr style="color: white; background-color:  #9e0059;">
+            <th scope="col" style="padding-left: 2%;">Usuario</th>
+            <th scope="col">Rol</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for usuario in usuarios %}
+          <tr>
+            <td style="padding-left: 2%;">{{usuario.nombre}}</td>
+            <td>
+              {% if usuario.rol == 1 %}
+              Cliente
+              {% elif usuario.rol == 2%}
+              Administrador
+              {% else %}
+              Discografica
+              {% endif %}
+            </td>
+            <td>
+
+              <div class="btn-group me-2" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="border-color: black; background-color: #9e0059; color: white;">
+                  Opciones
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                  <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;"
+                    href="see/?id={{pedidos.Cpedido}}">
+                    <img src="../../static/permission-icon-3.jpg" alt="" width="20" height="20"
+                      class="d-inline-block align-top">
+                    Modificar permisos
+
+                    {% if usuario.rol == 1 %}
+
+                    <form method="post" class="btn btn-light m-2 border border-dark" style="color: #9e0059;">
+                      {% csrf_token %}
+                      <input class="form-check-input" type="radio" name="rol" id="exampleRadios1" value="2" checked>
+                      <label class="form-check-label" for="exampleRadios1">
+                        Administrador
+                      </label>
+                      <input class="form-check-input" type="radio" name="rol" id="exampleRadios1" value="3" checked>
+                      <label class="form-check-label" for="exampleRadios1">
+                        Discografica
+                      </label>
+                      <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout"
+                        name="userId" value="{{ usuario.id }}">
+                      <button class="btn btn-light m-2 border border-dark" style="color: #9e0059;" type="submit">
+                        Aceptar
+                      </button>
+                    </form>
+
+                    {% elif usuario.rol == 2 %}
+                    <form method="post" class="btn btn-light m-2 border border-dark" style="color: #9e0059;">
+                      {% csrf_token %}
+                      <input class="form-check-input" type="radio" name="rol" id="exampleRadios1" value="1" checked>
+                      <label class="form-check-label" for="exampleRadios1">
+                        Cliente &nbsp
+                      </label>
+                      <input class="form-check-input" type="radio" name="rol" id="exampleRadios1" value="3" checked>
+                      <label class="form-check-label" for="exampleRadios1">
+                        Discografica
+                      </label>
+                      <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout"
+                        name="userId" value="{{ usuario.id }}">
+                      <button class="btn btn-light m-2 border border-dark" style="color: #9e0059;" type="submit">
+                        Aceptar
+                      </button>
+                    </form>
+                    {% else %}
+                    <form method="post" class="btn btn-light m-2 border border-dark" style="color: #9e0059;">
+                      {% csrf_token %}
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="rol" id="exampleRadios1" value="1" checked>
+                        <label class="form-check-label" for="exampleRadios1">
+                          Cliente &nbsp
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="rol" id="exampleRadios1" value="2" checked>
+                        <label class="form-check-label" for="exampleRadios1">
+                          Administrador
+                        </label>
+                      </div>
+                      <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout"
+                        name="userId" value="{{ usuario.id }}">
+                      <button class="btn btn-light m-2 border border-dark" style="color: #9e0059;" type="submit">
+                        Aceptar
+                      </button>
+                    </form>
+
+                    {% endif %}
+
+                  </a>
+                  <form method="post">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout"
+                      name="delete" value="{{ usuario.id }}">
+                    <button class="btn btn-light m-2 border border-dark" style="color: #9e0059;" type="submit">
+                      <img src="../../static/61848.png" alt="" width="20" height="20" class="d-inline-block align-top">
+                      Eliminar
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+            </td>
+          </tr>
+          {% endfor %}
+
+    </div>
+  </div>
+
+  {% else %}
+
+  <div class="card">
+    <div class="card-body">
+      Donde vas listill@? no estas autorizado.
+    </div>
+  </div>
+
+  {% endif %}
+
+  {% if messages %}
+  {% for message in messages %}
+  <script>
+    alert('{{ message }}');
+  </script>
+  {% endfor %}
+  {% endif %}
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
