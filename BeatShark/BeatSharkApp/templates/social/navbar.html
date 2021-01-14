@@ -43,7 +43,7 @@
           <a class="btn btn-light m-2 border border-dark" style="color: white; background-color: #9e0059;"
             href="{% url 'edit' %}">Panel de Administrador</a>
           {% endif %}
-          <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;" href="see/?id={{pedidos.Cpedido}}">
+          <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;" href="fav/?userid={{request.session.user}}">
             <img src="../../static/favorite-icon-715x715.png" alt="" width="20" height="20"
               class="d-inline-block align-top">
             Favoritos

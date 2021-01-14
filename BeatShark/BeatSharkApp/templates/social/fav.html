@@ -24,55 +24,48 @@
   <div class="container">
     <div class="row row-cols-2">
 
-      {% for cancion in canciones %}
-        <div class="col card m-2 justify-content-center" style="width: 18rem; border-color: #9e0059; border-width: 2px;">
-          <img class="card-img-top" src="../../static/Music-Icon-by-Kanggraphic-3-580x386.jpg" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">{{ cancion.titulo }}</h5>
-            <p class="card-text">Artista:
-              {% for artista in cancion.artista.all%}
-                {{artista.nombre}}
-              {% endfor %}
-            </p>
-            <p class="card-text">Genero:
-              {% for genero in cancion.genero.all%}
-                {{genero.nombre_genero}}
-              {% endfor %}
-            </p>
-            
+
+      {% for favs in lista_fav %}
+      {% for cancion in favs.cancion.all %}
+      <div class="col card m-2 justify-content-center" style="width: 18rem; border-color: #9e0059; border-width: 2px;">
+        <img class="card-img-top" src="../../static/Music-Icon-by-Kanggraphic-3-580x386.jpg" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{ cancion.titulo }}</h5>
+          <p class="card-text">Artista:
+            {% for artista in cancion.artista.all%}
+            {{artista.nombre}}
+            {% endfor %}
+          </p>
+          <p class="card-text">Genero:
+            {% for genero in cancion.genero.all%}
+            {{genero.nombre_genero}}
+            {% endfor %}
+          </p>
           {% if request.session.user %}
-              <form method="post">
-                {% csrf_token %}
-                <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout"
-                  name="favId" value="{{ cancion.id }}">
-                  <button class="btn btn-light m-2 border border-dark" style="color: #9e0059;" type="submit">
-                  <img src="../../static/favorite-icon-715x715.png" alt="" width="20" height="20"
-                  class="d-inline-block align-top">
-                  Añadir a Favoritos
-                </button>
-              </form>
+          <form method="post">
+            {% csrf_token %}
+            <input class="form-control me-2" type="hidden" placeholder="logout" aria-label="logout" name="delete"
+              value="{{ favs.id }}">
+            <button class="btn btn-light m-2 border border-dark" style="color: #9e0059;" type="submit">
+              <img src="../../static/61848.png" alt="" width="20" height="20" class="d-inline-block align-top">
+              Eliminar de favoritos
+            </button>
+          </form>
           {% endif %}
-
-
-
-
-
-
-
-          </div>
         </div>
+      </div>
       {% endfor %}
-
-
-
-
-
-
-      
+      {% empty %}
+      <div class="card">
+        <div class="card-body">
+          No tienes ninguna cancion añadida a favoritos
+        </div>
+      </div>
+      {% endfor %}
     </div>
-</div>
+  </div>
 
-  
+
 
   {% if messages %}
   {% for message in messages %}

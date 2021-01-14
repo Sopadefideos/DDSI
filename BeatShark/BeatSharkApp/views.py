@@ -7,6 +7,7 @@ from passlib.hash import pbkdf2_sha256
 #VISTAS!!
 
 def index(request):
+    
     ########## LOGIN ########
     if(request.POST.get('user')):
         user = request.POST.get('user')
@@ -24,17 +25,35 @@ def index(request):
         else:
             messages.info(request, 'El usuario no existe')
             return HttpResponseRedirect("/")
+    
     ########## LOGOUT ########
     if(request.GET.get('logout')):
         for key in list(request.session.keys()):
             del request.session[key]
         return HttpResponseRedirect("/")
-
-    canciones = Cancion.objects.all()
-
-    print(canciones[0].artista.all()[0].nombre)
     
+    ########## ADD FAV ########
+    if(request.POST.get('favId')):
+        id_cancion = request.POST.get('favId')
+        id_usuario = request.session["user"]
 
+        user = Usuario.objects.get(nombre=id_usuario)
+        song = Cancion.objects.get(id=id_cancion)
+
+        try:
+            FavCancion.objects.get(usuario=user, cancion=song)
+            messages.info(request, 'Ya esta añadida a Favoritos')
+            return HttpResponseRedirect("/")
+        except:
+            new_fav = FavCancion.objects.create()
+            new_fav.cancion.add(song)
+            new_fav.usuario.add(user)
+            
+            new_fav.save()
+            return HttpResponseRedirect("/")
+
+
+    canciones = Cancion.objects.all()    
     return render(request, 'social/index.html', {'canciones': canciones})
 
 def register(request):
@@ -111,4 +130,23 @@ def admin(request):
     usuarios = Usuario.objects.all()
     return render(request, 'social/admin.html', {'usuarios': usuarios})
 
+
+def fav(request):
+    
+    ########## DELETE FAV ########
+    if (request.POST.get('delete')):
+        favId = request.POST.get('delete')
+        nombre_user = request.GET.get('userid')
+        FavCancion.objects.get(id=favId).delete()
+        return HttpResponseRedirect("/fav/?userid=" + nombre_user)
+    
+    ########## PASSING LIST OF FAV ########
+    if (request.GET.get('userid')):
+        nombre_user = request.GET.get('userid')
+        usuario = Usuario.objects.get(nombre=nombre_user)
+        lista_fav = FavCancion.objects.filter(usuario=usuario)
+        return render(request, 'social/fav.html', {'lista_fav': lista_fav})
+        
+
+    return render(request, 'social/fav.html')
 
