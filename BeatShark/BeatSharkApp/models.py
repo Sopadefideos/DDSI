@@ -16,7 +16,7 @@ class Genero(models.Model):
     nombre_genero = models.CharField(max_length=50)
 
 class Artista(models.Model):
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50, unique=True)
     nacionalidad = models.CharField(max_length=20)
     fechaNacimiento = models.DateField(auto_now_add=False, auto_now=False, blank=True, null=True)
 

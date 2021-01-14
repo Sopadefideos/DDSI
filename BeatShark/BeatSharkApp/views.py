@@ -32,9 +32,9 @@ def index(request):
             del request.session[key]
         return HttpResponseRedirect("/")
     
-    ########## ADD FAV ########
-    if(request.POST.get('favId')):
-        id_cancion = request.POST.get('favId')
+    ########## ADD FAV SONG ########
+    if(request.POST.get('favIdCancion')):
+        id_cancion = request.POST.get('favIdCancion')
         id_usuario = request.session["user"]
 
         user = Usuario.objects.get(nombre=id_usuario)
@@ -52,9 +52,52 @@ def index(request):
             new_fav.save()
             return HttpResponseRedirect("/")
 
+    ########## ADD FAV ARTISTA ########
+    if(request.POST.get('favIdArtista')):
+        id_artista = request.POST.get('favIdArtista')
+        id_usuario = request.session["user"]
 
-    canciones = Cancion.objects.all()    
-    return render(request, 'social/index.html', {'canciones': canciones})
+        user = Usuario.objects.get(nombre=id_usuario)
+        artista = Artista.objects.get(id=id_artista)
+
+        try:
+            FavArtista.objects.get(usuario=user, artista=artista)
+            messages.info(request, 'Ya esta añadida a Favoritos')
+            return HttpResponseRedirect("/")
+        except:
+            new_fav = FavArtista.objects.create()
+            new_fav.artista.add(artista)
+            new_fav.usuario.add(user)
+            
+            new_fav.save()
+            return HttpResponseRedirect("/")
+
+    ########## ADD FAV ALBUM ########
+    if(request.POST.get('favIdAlbum')):
+        id_album = request.POST.get('favIdAlbum')
+        id_usuario = request.session["user"]
+
+        user = Usuario.objects.get(nombre=id_usuario)
+        album = Album.objects.get(id=id_album)
+
+        try:
+            FavAlbum.objects.get(usuario=user, album=album)
+            messages.info(request, 'Ya esta añadida a Favoritos')
+            return HttpResponseRedirect("/")
+        except:
+            new_fav = FavAlbum.objects.create()
+            new_fav.album.add(album)
+            new_fav.usuario.add(user)
+            
+            new_fav.save()
+            return HttpResponseRedirect("/")
+
+
+    canciones = Cancion.objects.all()
+    artistas = Artista.objects.all()
+    albumes = Album.objects.all()
+
+    return render(request, 'social/index.html', {'canciones': canciones, 'artistas': artistas, 'albumes': albumes})
 
 def register(request):
 
@@ -110,10 +153,24 @@ def admin(request):
             messages.info(request, 'El usuario no existe')
             return HttpResponseRedirect("/")
 
-    ########## DELETE ########
-    if (request.POST.get('delete')):
-        userId = request.POST.get('delete')
+    ########## DELETE USER ########
+    if (request.POST.get('deleteUser')):
+        userId = request.POST.get('deleteUser')
         Usuario.objects.filter(id=userId).delete()
+        return HttpResponseRedirect("/edit")
+
+    ########## DELETE GENERO ########
+    if (request.POST.get('deleteGenero')):
+        generoId = request.POST.get('deleteGenero')
+        Genero.objects.filter(id=generoId).delete()
+        return HttpResponseRedirect("/edit")
+
+    ########## DELETE ARTIST ########
+    if (request.POST.get('deleteArtist')):
+        artistId = request.POST.get('deleteArtist')
+        artista = Artista.objects.get(id=artistId)
+        Cancion.objects.filter(artista=artista).delete()
+        Artista.objects.filter(id=artistId).delete()
         return HttpResponseRedirect("/edit")
 
     ########## CHANGE ROL ########
@@ -127,26 +184,72 @@ def admin(request):
         userUpdate.save(force_update=True)
         return HttpResponseRedirect("/edit")
     
+    canciones = Cancion.objects.all()
     usuarios = Usuario.objects.all()
-    return render(request, 'social/admin.html', {'usuarios': usuarios})
+    artistas = Artista.objects.all()
+    albumes = Album.objects.all()
+    generos = Genero.objects.all()
+    return render(request, 'social/admin.html', {'canciones': canciones, 'artistas': artistas,
+     'albumes': albumes, 'usuarios': usuarios, 'generos': generos})
 
 
 def fav(request):
+    ########## LOGOUT ########
+    if(request.GET.get('logout')):
+        for key in list(request.session.keys()):
+            del request.session[key]
+        return HttpResponseRedirect("/")
+
+    ########## LOGIN ########
+    if(request.POST.get('user')):
+        user = request.POST.get('user')
+        password = request.POST.get('password')
+
+        if (Usuario.objects.filter(nombre=user)):
+            if (Usuario.verify_password(Usuario.objects.get(nombre=user), password)):
+                request.session["user"] = user
+                UserRol = Usuario.objects.get(nombre=user)
+                request.session["rol"] = UserRol.rol
+                return HttpResponseRedirect("/")
+            else:
+                messages.info(request, 'La contraseña no coincide')
+                return HttpResponseRedirect("/")
+        else:
+            messages.info(request, 'El usuario no existe')
+            return HttpResponseRedirect("/")
     
-    ########## DELETE FAV ########
-    if (request.POST.get('delete')):
-        favId = request.POST.get('delete')
-        nombre_user = request.GET.get('userid')
-        FavCancion.objects.get(id=favId).delete()
+    ########## DELETE FAV CANCION ########
+    if (request.POST.get('deleteCancion')):
+        favIdCancion = request.POST.get('deleteCancion')
+        nombre_user = request.session["user"]
+        FavCancion.objects.get(id=favIdCancion).delete()
+        return HttpResponseRedirect("/fav/?userid=" + nombre_user)
+
+    ########## DELETE FAV CANCION ########
+    if (request.POST.get('deleteAlbum')):
+        favIdAlbum = request.POST.get('deleteAlbum')
+        nombre_user = request.session["user"]
+        FavAlbum.objects.get(id=favIdAlbum).delete()
+        return HttpResponseRedirect("/fav/?userid=" + nombre_user)
+
+    ########## DELETE FAV CANCION ########
+    if (request.POST.get('deleteArtista')):
+        favIdArtista = request.POST.get('deleteArtista')
+        nombre_user = request.session["user"]
+        FavArtista.objects.get(id=favIdArtista).delete()
         return HttpResponseRedirect("/fav/?userid=" + nombre_user)
     
     ########## PASSING LIST OF FAV ########
-    if (request.GET.get('userid')):
-        nombre_user = request.GET.get('userid')
+    if (request.session.get('user')):
+        nombre_user = request.session["user"]
         usuario = Usuario.objects.get(nombre=nombre_user)
-        lista_fav = FavCancion.objects.filter(usuario=usuario)
-        return render(request, 'social/fav.html', {'lista_fav': lista_fav})
+        lista_favCancion = FavCancion.objects.filter(usuario=usuario)
+        lista_favAlbum = FavAlbum.objects.filter(usuario=usuario)
+        lista_favArtista = FavArtista.objects.filter(usuario=usuario)
+        return render(request, 'social/fav.html', {'lista_favCancion': lista_favCancion, 'lista_favAlbum': lista_favAlbum, 'lista_favArtista': lista_favArtista})
         
-
     return render(request, 'social/fav.html')
 
+def mod(request):
+
+    return render(request, 'social/mod.html')
