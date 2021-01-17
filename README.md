@@ -11,3 +11,7 @@ _Sistema de información basado en la música_
 
 _Usuario:admin_
 _Contraseña:beatshark_
+
+# Comandos para el cifrado
+
+_pip install passlib_
