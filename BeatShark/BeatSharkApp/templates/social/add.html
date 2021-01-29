@@ -19,10 +19,38 @@
 
 <body style="background-color: #9e0059;">
 {% if request.session.rol == 2  or request.session.rol == 3%}
-    {% if request.GET.idArtista %}
-    {% for artista in artistas %}
-      {% ifequal artista.id|stringformat:"s" request.GET.idArtista %}
-            <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
+
+    {% if request.session.rol == 2 and request.GET.Usuario%}
+    <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
+      <div class="abs-center">
+        <form method="post" class="p-3 form">
+          {% csrf_token %}
+          <div class="form-group m-2">
+            <label for="email">Usuario</label>
+            <input type="text" name="user" id="user" class="form-control" required>
+          </div>
+          <div class="form-group m-2">
+            <label for="contraseña">Contraseña</label>
+            <input type="password" name="password" id="password" class="form-control" required>
+          </div>
+          <div class="form-group m-2">
+            <label for="contraseña">Repetir Contraseña</label>
+            <input type="password" name="passwordRepeat" id="passwordRepeat" class="form-control" required>
+          </div>
+          <div class="form-group m-2">
+            <label for="contraseña">Email</label>
+            <input type="email" name="email" id="email" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary m-2" style="border-color: black; background-color: #9e0059; color: white;">Crear</button>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+
+    {% if request.GET.Artista %}
+
+          <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
           <div class="abs-center">
             <form method="post" class="p-3 form">
               {% csrf_token %}
@@ -42,11 +70,9 @@
             </form>
           </div>
         </div>
-      {% endifequal %}
-    {% endfor %}
-    {% elif request.GET.idGenero%}
-    {% for genero in generos %}
-      {% ifequal genero.id|stringformat:"s" request.GET.idGenero %}
+     
+    {% elif request.GET.Genero%}
+   
             <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
           <div class="abs-center">
             <form method="post" class="p-3 form">
@@ -59,11 +85,9 @@
             </form>
           </div>
         </div>
-      {% endifequal %}
-    {% endfor %}
-    {% elif request.GET.idCancion%}
-    {% for cancion in canciones %}
-      {% ifequal cancion.id|stringformat:"s" request.GET.idCancion %}
+
+    {% elif request.GET.Cancion%}
+
             <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
           <div class="abs-center">
             <form method="post" class="p-3 form">
@@ -92,11 +116,9 @@
             </form>
           </div>
         </div>
-      {% endifequal %}
-    {% endfor %}
-    {% elif request.GET.idAlbum%}
-      {% for album in albumes %}
-      {% ifequal album.id|stringformat:"s" request.GET.idAlbum %}
+
+    {% elif request.GET.Album%}
+
             <div class="container rounded" style="background-color: white; margin-top: 10%; margin-bottom: 10%;">
           <div class="abs-center">
             <form method="post" class="p-3 form">
@@ -117,8 +139,7 @@
             </form>
           </div>
         </div>
-      {% endifequal %}
-    {% endfor %}
+
     {% endif %}
   {% else %}
     <div class="card-body">

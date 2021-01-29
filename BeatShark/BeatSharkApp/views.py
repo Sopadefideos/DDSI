@@ -91,6 +91,15 @@ def index(request):
             
             new_fav.save()
             return HttpResponseRedirect("/")
+    
+     ########## SEARCH ########
+    if (request.GET.get('search')):
+        busca = request.GET.get('search')
+        canciones = Cancion.objects.filter(titulo=busca)
+        artistas = Artista.objects.filter(nombre=busca)
+        albumes = Album.objects.filter(nombre=busca)
+        return render(request, 'social/index.html', {'canciones': canciones, 'artistas': artistas,
+        'albumes': albumes})
 
 
     canciones = Cancion.objects.all()
@@ -179,6 +188,12 @@ def admin(request):
         Cancion.objects.filter(id=canciontId).delete()
         return HttpResponseRedirect("/edit")
 
+    ########## DELETE ALBUM ########
+    if (request.POST.get('deleteAlbum')):
+        albumtId = request.POST.get('deleteAlbum')
+        Album.objects.filter(id=albumtId).delete()
+        return HttpResponseRedirect("/edit")
+
     ########## CHANGE ROL ########
     if (request.POST.get('rol')):
         newRol = request.POST.get('rol')
@@ -189,6 +204,15 @@ def admin(request):
 
         userUpdate.save(force_update=True)
         return HttpResponseRedirect("/edit")
+
+     ########## SEARCH ########
+    if (request.GET.get('search')):
+        busca = request.GET.get('search')
+        canciones = Cancion.objects.filter(titulo=busca)
+        artistas = Artista.objects.filter(nombre=busca)
+        albumes = Album.objects.filter(nombre=busca)
+        return render(request, 'social/index.html', {'canciones': canciones, 'artistas': artistas,
+        'albumes': albumes})
     
     canciones = Cancion.objects.all()
     usuarios = Usuario.objects.all()
@@ -253,15 +277,70 @@ def fav(request):
         lista_favAlbum = FavAlbum.objects.filter(usuario=usuario)
         lista_favArtista = FavArtista.objects.filter(usuario=usuario)
         return render(request, 'social/fav.html', {'lista_favCancion': lista_favCancion, 'lista_favAlbum': lista_favAlbum, 'lista_favArtista': lista_favArtista})
+
+     ########## SEARCH ########
+    if (request.GET.get('search')):
+        busca = request.GET.get('search')
+        canciones = Cancion.objects.filter(titulo=busca)
+        artistas = Artista.objects.filter(nombre=busca)
+        albumes = Album.objects.filter(nombre=busca)
+        return render(request, 'social/index.html', {'canciones': canciones, 'artistas': artistas,
+        'albumes': albumes})
         
     return render(request, 'social/fav.html')
 
 def mod(request):
 
+    ########## MOD ARTISTA ########
+    if (request.GET.get('idArtista')):
+        if(request.POST.get('nombre')):
+            newName = request.POST.get('nombre')
+            newCity = request.POST.get('nacionalidad')
+            newDate = request.POST.get('fechaNacimiento')
+            newArtist = Artista(id=request.GET.get('idArtista'), nombre=newName, nacionalidad=newCity, fechaNacimiento=newDate)
+            newArtist.save(force_update=True)
+            return HttpResponseRedirect("/edit")
 
+    ########## MOD GENERO ########
+    if (request.GET.get('idGenero')):
+        if(request.POST.get('nombre')):
+            newName = request.POST.get('nombre')
+            newGenero = Genero(id=request.GET.get('idGenero'), nombre_genero=newName)
+            newGenero.save(force_update=True)
+            return HttpResponseRedirect("/edit")
 
+    ########## MOD CANCION ########
+    if (request.GET.get('idCancion')):
+        if(request.POST.get('nombre')):
+            newName = request.POST.get('nombre')
+            newArtist = request.POST.get('artista')
+            newGenero = request.POST.get('genero')
+            artist = Artista.objects.get(nombre=newArtist)
+            gen = Genero.objects.get(nombre_genero=newGenero)
+            newCancion = Cancion(id=request.GET.get('idCancion'), titulo=newName)
+            newCancion.save(force_update=True)
+            newCancion.artista.add(artist)
+            newCancion.genero.add(gen)
+            return HttpResponseRedirect("/edit")
+            
+    ########## MOD GENERO ########
+    if (request.GET.get('idAlbum')):
+        if(request.POST.get('nombre')):
+            newName = request.POST.get('nombre')
+            newNumCanciones = request.POST.get('numCanciones')
+            newDate = request.POST.get('fechaEstreno')
+            newAlbum = Album(id=request.GET.get('idAlbum'), nombre=newName, num_canciones=newNumCanciones, fechaEstreno=newDate)
+            newAlbum.save(force_update=True)
+            return HttpResponseRedirect("/edit")
 
-
+     ########## SEARCH ########
+    if (request.GET.get('search')):
+        busca = request.GET.get('search')
+        canciones = Cancion.objects.filter(titulo=busca)
+        artistas = Artista.objects.filter(nombre=busca)
+        albumes = Album.objects.filter(nombre=busca)
+        return render(request, 'social/index.html', {'canciones': canciones, 'artistas': artistas,
+        'albumes': albumes})
 
 
     canciones = Cancion.objects.all()
@@ -270,4 +349,91 @@ def mod(request):
     albumes = Album.objects.all()
     generos = Genero.objects.all()
     return render(request, 'social/mod.html', {'canciones': canciones, 'artistas': artistas,
+     'albumes': albumes, 'usuarios': usuarios, 'generos': generos})
+
+
+def add(request):
+
+    ########## ARTISTA ########
+    if (request.GET.get('Artista')):
+        if(request.POST.get('nombre')):
+            newName = request.POST.get('nombre')
+            newCity = request.POST.get('nacionalidad')
+            newDate = request.POST.get('fechaNacimiento')
+            newArtist = Artista(nombre=newName, nacionalidad=newCity, fechaNacimiento=newDate)
+            newArtist.save()
+            return HttpResponseRedirect("/edit")
+
+    ########## GENERO ########
+    if (request.GET.get('Genero')):
+        if(request.POST.get('nombre')):
+            newName = request.POST.get('nombre')
+            newGenero = Genero(nombre_genero=newName)
+            newGenero.save()
+            return HttpResponseRedirect("/edit")
+
+    ########## CANCION ########
+    if (request.GET.get('Cancion')):
+        if(request.POST.get('nombre')):
+            newName = request.POST.get('nombre')
+            newArtist = request.POST.get('artista')
+            newGenero = request.POST.get('genero')
+            artist = Artista.objects.get(nombre=newArtist)
+            gen = Genero.objects.get(nombre_genero=newGenero)
+            newCancion = Cancion(titulo=newName)
+            newCancion.save()
+            newCancion.artista.add(artist)
+            newCancion.genero.add(gen)
+            return HttpResponseRedirect("/edit")
+            
+    ########## GENERO ########
+    if (request.GET.get('Album')):
+        if(request.POST.get('nombre')):
+            newName = request.POST.get('nombre')
+            newNumCanciones = request.POST.get('numCanciones')
+            newDate = request.POST.get('fechaEstreno')
+            newAlbum = Album(nombre=newName, num_canciones=newNumCanciones, fechaEstreno=newDate)
+            newAlbum.save()
+            return HttpResponseRedirect("/edit")
+
+    ########## USUARIO ########
+    if (request.GET.get('Usuario')):
+        if(request.POST.get('user')):
+            username = request.POST.get('user')
+            password = request.POST.get('password')
+            Repassword = request.POST.get('passwordRepeat')
+            email = request.POST.get('email')
+            if (password == Repassword):
+                if (Usuario.objects.filter(nombre=username)):
+                    messages.info(request, 'El usuario ya existe')
+                    return HttpResponseRedirect("/edit/add/?Usuario=yes")
+
+                if (Usuario.objects.filter(email=email)):
+                    messages.info(request, 'El email ya existe')
+                    return HttpResponseRedirect("/edit/add/?Usuario=yes")
+
+                enc_password =  pbkdf2_sha256.encrypt(password, rounds=12000, salt_size=32)
+                user = Usuario(nombre=username, contraseña=enc_password, email=email)
+                user.save()
+                return HttpResponseRedirect("/edit")
+            else:
+                messages.info(request, 'Las contraseñas no coinciden')
+                return HttpResponseRedirect("/edit/add/?Usuario=yes")
+
+    ########## SEARCH ########
+    if (request.GET.get('search')):
+        busca = request.GET.get('search')
+        canciones = Cancion.objects.filter(titulo=busca)
+        artistas = Artista.objects.filter(nombre=busca)
+        albumes = Album.objects.filter(nombre=busca)
+        return render(request, 'social/index.html', {'canciones': canciones, 'artistas': artistas,
+        'albumes': albumes})
+
+
+    canciones = Cancion.objects.all()
+    usuarios = Usuario.objects.all()
+    artistas = Artista.objects.all()
+    albumes = Album.objects.all()
+    generos = Genero.objects.all()
+    return render(request, 'social/add.html', {'canciones': canciones, 'artistas': artistas,
      'albumes': albumes, 'usuarios': usuarios, 'generos': generos})

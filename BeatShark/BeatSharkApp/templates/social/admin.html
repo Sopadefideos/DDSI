@@ -20,11 +20,19 @@
 <body>
   {% include "social/navbar.html" %}
 
-  {% if request.session.rol == 2%}
-<!--USUARIOS-->
+  {% if request.session.rol == 2 or request.session.rol == 3%}
+
+  {% if request.session.rol == 2 %}
+  <!--USUARIOS-->
   <div class="card" style="margin: 5%; color: white; background-color: #9e0059; font-weight: bold;">
     <div class="card-body">
       Panel de Usuarios
+      <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;"
+                    href="add/?Usuario=yes">
+                    <img src="../../static/permission-icon-3.jpg" alt="" width="20" height="20"
+                      class="d-inline-block align-top">
+                    Crear un usuario
+        </a>
     </div>
     <div class="card-body" style="background-color: white; color: black; font-weight: lighter;">
       <table class="table col border border-dark" style="margin-top: 1%; margin-bottom: 1%;">
@@ -142,10 +150,18 @@
           </table>
     </div>
   </div>
+
+  {% endif %}
 <!--ARTISTAS-->
   <div class="card" style="margin: 5%; color: white; background-color: #9e0059; font-weight: bold;">
     <div class="card-body">
       Panel de Artistas
+      <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;"
+                    href="add/?Artista=yes">
+                    <img src="../../static/permission-icon-3.jpg" alt="" width="20" height="20"
+                      class="d-inline-block align-top">
+                    Crear un Artista
+        </a>
     </div>
     <div class="card-body" style="background-color: white; color: black; font-weight: lighter;">
       <table class="table col border border-dark" style="margin-top: 1%; margin-bottom: 1%;">
@@ -197,6 +213,12 @@
   <div class="card" style="margin: 5%; color: white; background-color: #9e0059; font-weight: bold;">
     <div class="card-body">
       Panel de Generos
+      <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;"
+                    href="add/?Genero=yes">
+                    <img src="../../static/permission-icon-3.jpg" alt="" width="20" height="20"
+                      class="d-inline-block align-top">
+                    Crear un Genero
+        </a>
     </div>
     <div class="card-body" style="background-color: white; color: black; font-weight: lighter;">
       <table class="table col border border-dark" style="margin-top: 1%; margin-bottom: 1%;">
@@ -247,6 +269,12 @@
   <div class="card" style="margin: 5%; color: white; background-color: #9e0059; font-weight: bold;">
     <div class="card-body">
       Panel de Canciones
+      <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;"
+                    href="add/?Cancion=yes">
+                    <img src="../../static/permission-icon-3.jpg" alt="" width="20" height="20"
+                      class="d-inline-block align-top">
+                    Crear una Cancion
+        </a>
     </div>
     <div class="card-body" style="background-color: white; color: black; font-weight: lighter;">
       <table class="table col border border-dark" style="margin-top: 1%; margin-bottom: 1%;">
@@ -261,7 +289,7 @@
           {% for cancion in canciones %}
           <tr>
             <td style="padding-left: 2%;">{{cancion.titulo}}</td>
-            <td style="">
+            <td>
               {% for artista in cancion.artista.all %}
                 {{ artista.nombre }}
               {% endfor %}
@@ -302,6 +330,12 @@
   <div class="card" style="margin: 5%; color: white; background-color: #9e0059; font-weight: bold;">
     <div class="card-body">
       Panel de Albumes
+      <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;"
+                    href="add/?Album=yes">
+                    <img src="../../static/permission-icon-3.jpg" alt="" width="20" height="20"
+                      class="d-inline-block align-top">
+                    Crear un Album
+        </a>
     </div>
     <div class="card-body" style="background-color: white; color: black; font-weight: lighter;">
       <table class="table col border border-dark" style="margin-top: 1%; margin-bottom: 1%;">

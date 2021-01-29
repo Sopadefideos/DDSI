@@ -7,5 +7,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('edit/', views.admin, name='edit'),
     path('fav/', views.fav, name='fav'),
-    path('edit/mod/', views.mod, name='mod')
+    path('edit/mod/', views.mod, name='mod'),
+    path('edit/add/', views.add, name='add')
 ]

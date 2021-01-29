@@ -28,7 +28,7 @@
     <!-- Example single danger button -->
 
     <form class="d-flex ">
-      <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+      <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" name="search">
       <button class="btn btn-outline-light" type="submit">Buscar</button>
     </form>
     <form class="d-flex me-2" method="get">
@@ -42,6 +42,10 @@
           {% if request.session.rol == 2 %}
           <a class="btn btn-light m-2 border border-dark" style="color: white; background-color: #9e0059;"
             href="{% url 'edit' %}">Panel de Administrador</a>
+          {% endif %}
+          {% if request.session.rol == 3 %}
+          <a class="btn btn-light m-2 border border-dark" style="color: white; background-color: #9e0059;"
+            href="{% url 'edit' %}">Panel de Discografica</a>
           {% endif %}
           <a class="btn btn-light m-2 border border-dark" style="color: #9e0059;" href="{% url 'fav' %}">
             <img src="../../static/favorite-icon-715x715.png" alt="" width="20" height="20"
